@@ -32,6 +32,8 @@ This repo includes [render.yaml](./render.yaml) for:
 
 Backend:
 
+- `DATABASE_URL`
+- `DIRECT_URL`
 - `OPENAI_API_KEY`
 - `ANTHROPIC_API_KEY`
 - `GOOGLE_GEMINI_API_KEY`
@@ -53,7 +55,12 @@ Frontend:
 2. Fill the `sync: false` variables in Render.
 3. Set `FRONTEND_URL` to your frontend Render URL.
 4. Set `VITE_API_URL` to your backend Render URL.
-5. Run the backend after the database is created so Prisma migrations can apply with:
+5. If you use Supabase:
+
+- set `DATABASE_URL` to the pooled connection string
+- set `DIRECT_URL` to the direct Postgres connection string
+
+6. Run the backend after the database is created so Prisma migrations can apply with:
 
 ```bash
 npm run prisma:deploy --workspace backend
