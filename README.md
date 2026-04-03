@@ -1,6 +1,6 @@
 # Rayyan AI
 
-Rayyan AI is a personal intelligence OS built as a Node/React monorepo.
+Rayyan AI is a personal intelligence OS built as a React + Express monorepo.
 
 ## Stack
 
@@ -17,23 +17,16 @@ Rayyan AI is a personal intelligence OS built as a Node/React monorepo.
 ```text
 frontend/  # Vite app
 backend/   # Express API + Prisma
+api/       # Vercel serverless entrypoint
 ```
 
-## Render Deployment
-
-This repo includes [render.yaml](./render.yaml) for:
-
-- `rayyanai-api` web service
-- `rayyanai-frontend` static site
-- `rayyanai-db` PostgreSQL database
-- `rayyanai-redis` Key Value instance
-
-### Required Render Environment Variables
+## Environment Variables
 
 Backend:
 
 - `DATABASE_URL`
 - `DIRECT_URL`
+- `REDIS_URL` (optional)
 - `OPENAI_API_KEY`
 - `ANTHROPIC_API_KEY`
 - `GOOGLE_GEMINI_API_KEY`
@@ -47,24 +40,82 @@ Backend:
 
 Frontend:
 
-- `VITE_API_URL`
+- `VITE_API_URL` (optional)
+  Leave empty for same-origin deployments on Render or Vercel.
 
-### First Deploy Notes
+## Supabase Database Setup
 
-1. Create the Render blueprint from this repo.
-2. Fill the `sync: false` variables in Render.
-3. Set `FRONTEND_URL` to your frontend Render URL.
-4. Set `VITE_API_URL` to your backend Render URL.
-5. If you use Supabase:
+If you use Supabase Postgres:
 
-- set `DATABASE_URL` to the pooled connection string
-- set `DIRECT_URL` to the direct Postgres connection string
+- `DATABASE_URL` should be your pooled or runtime-safe Postgres URL
+- `DIRECT_URL` should be your direct Postgres URL for Prisma migrations
+- both URLs should include `?sslmode=require`
 
-6. Run the backend after the database is created so Prisma migrations can apply with:
+Example:
 
-```bash
-npm run prisma:deploy --workspace backend
+```env
+DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/postgres?sslmode=require
+DIRECT_URL=postgresql://USER:PASSWORD@HOST:5432/postgres?sslmode=require
 ```
+
+Supabase project URL and publishable key are not required for this app's current server-side database setup.
+
+## Render Deployment
+
+This repo includes [render.yaml](./render.yaml) for a single Render web service.
+
+Recommended Render settings:
+
+- Service type: `Web Service`
+- Root Directory: blank
+- Build Command: `npm install`
+- Start Command: `npm start`
+- Health Check Path: `/api/health`
+
+Required Render env vars:
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `FRONTEND_URL`
+
+Optional Render env vars:
+
+- `REDIS_URL`
+- `OPENAI_API_KEY`
+- `ANTHROPIC_API_KEY`
+- `GOOGLE_GEMINI_API_KEY`
+- `PINECONE_API_KEY`
+- `PINECONE_INDEX`
+- `PINECONE_REGION`
+- `SINGLE_USER_EMAIL`
+- `SINGLE_USER_NAME`
+- `SINGLE_USER_ASSISTANT_NAME`
+
+## Vercel Deployment
+
+This repo includes [vercel.json](./vercel.json) for:
+
+- static frontend output from `frontend/dist`
+- serverless API routes via [api/[...route].js](./api/[...route].js)
+
+Required Vercel env vars:
+
+- `DATABASE_URL`
+- `DIRECT_URL`
+- `FRONTEND_URL`
+
+Optional Vercel env vars:
+
+- `REDIS_URL`
+- `OPENAI_API_KEY`
+- `ANTHROPIC_API_KEY`
+- `GOOGLE_GEMINI_API_KEY`
+- `PINECONE_API_KEY`
+- `PINECONE_INDEX`
+- `PINECONE_REGION`
+- `SINGLE_USER_EMAIL`
+- `SINGLE_USER_NAME`
+- `SINGLE_USER_ASSISTANT_NAME`
 
 ## Local Secret Safety
 
