@@ -21,9 +21,12 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const frontendDistPath = path.resolve(__dirname, "../frontend/dist");
 const frontendIndexPath = path.join(frontendDistPath, "index.html");
-const allowedOrigins = (process.env.FRONTEND_URL || "http://localhost:5173")
-  .split(",")
-  .map((origin) => origin.trim());
+const allowedOrigins = [
+  ...(process.env.FRONTEND_URL || "http://localhost:5173")
+    .split(",")
+    .map((origin) => origin.trim()),
+  process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : null,
+].filter(Boolean);
 
 export const app = express();
 
