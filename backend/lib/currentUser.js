@@ -61,7 +61,7 @@ export const getUserByClerkIdOrThrow = async (clerkId) => {
   const user = await getUserByClerkId(clerkId);
 
   if (!user) {
-    if (!process.env.CLERK_SECRET_KEY || clerkId === DEFAULT_SINGLE_USER_CLERK_ID) {
+    if (clerkId === DEFAULT_SINGLE_USER_CLERK_ID) {
       return getOrCreateSingleUser();
     }
 
