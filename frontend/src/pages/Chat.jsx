@@ -1,4 +1,3 @@
-import { useAuth } from "@clerk/clerk-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -10,7 +9,6 @@ import useGoalStore from "@/store/useGoalStore";
 
 function Chat() {
   const location = useLocation();
-  const { getToken } = useAuth();
   const [draft, setDraft] = useState("");
   const handledNavigationRef = useRef(null);
   const conversations = useChatStore((state) => state.conversations);
@@ -91,7 +89,7 @@ function Chat() {
         onNewChat={() => createConversation()}
         onSelectConversation={handleSelectConversation}
       />
-      <ChatWindow draft={draft} onDraftChange={setDraft} getToken={getToken} />
+      <ChatWindow draft={draft} onDraftChange={setDraft} />
       <SuggestionsPanel onUseSuggestion={setDraft} />
     </div>
   );

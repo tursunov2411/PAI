@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "../lib/prisma.js";
 import { requireAuth } from "../middleware/auth.js";
+import { getOrCreateSingleUser } from "../lib/currentUser.js";
 
 const router = express.Router();
 
@@ -16,6 +17,28 @@ const buildCreateInput = (clerkId, body) => ({
 
 router.post("/sync", requireAuth, async (req, res, next) => {
   try {
+    if (!process.env.CLERK_SECRET_KEY) {
+      const singleUser = await getOrCreateSingleUser();
+      const user = await prisma.user.update({
+        where: {
+          id: singleUser.id,
+        },
+        data: {
+          ...(req.body.name ? { name: req.body.name } : {}),
+          ...(req.body.email ? { email: req.body.email } : {}),
+          ...(req.body.aboutMe !== undefined ? { aboutMe: req.body.aboutMe } : {}),
+          ...(req.body.tonePreference ? { tonePreference: req.body.tonePreference } : {}),
+          ...(req.body.assistantName ? { assistantName: req.body.assistantName } : {}),
+          ...(req.body.language ? { language: req.body.language } : {}),
+        },
+      });
+
+      return res.json({
+        success: true,
+        user,
+      });
+    }
+
     const existingUser = await prisma.user.findUnique({
       where: {
         clerkId: req.userId,
@@ -57,4 +80,3 @@ router.post("/sync", requireAuth, async (req, res, next) => {
 });
 
 export default router;
-

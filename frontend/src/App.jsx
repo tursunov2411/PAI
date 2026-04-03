@@ -9,7 +9,6 @@ import Notes from "@/pages/Notes";
 import Planner from "@/pages/Planner";
 import PlaceholderPage from "@/pages/PlaceholderPage";
 import ProtectedRoute from "@/components/ProtectedRoute";
-import ClerkBridge from "@/components/ClerkBridge";
 import DashboardShell from "@/components/layout/DashboardShell";
 
 const placeholderRoutes = [
@@ -36,7 +35,6 @@ const placeholderRoutes = [
 function App() {
   return (
     <>
-      <ClerkBridge />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />

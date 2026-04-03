@@ -94,7 +94,7 @@ const useChatStore = create((set, get) => ({
       lastRetrievedMemories: [],
       ...(options.pinnedGoal !== undefined ? { pinnedGoal: options.pinnedGoal } : {}),
     }),
-  sendMessage: async ({ message, getToken }) => {
+  sendMessage: async ({ message }) => {
     const trimmedMessage = message.trim();
 
     if (!trimmedMessage) {
@@ -124,12 +124,10 @@ const useChatStore = create((set, get) => ({
     });
 
     try {
-      const token = await getToken();
       const response = await fetch(`${api.defaults.baseURL}/api/chat/message`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
         body: JSON.stringify({
           message: trimmedMessage,

@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useAuth } from "@clerk/clerk-react";
 import ReactMarkdown from "react-markdown";
 import {
   Bookmark,
@@ -71,10 +70,9 @@ const markdownComponents = {
   ),
 };
 
-function ChatWindow({ draft, onDraftChange, getToken }) {
+function ChatWindow({ draft, onDraftChange }) {
   const localTextareaRef = useRef(null);
   const bottomRef = useRef(null);
-  const { getToken: hookGetToken } = useAuth();
   const conversations = useChatStore((state) => state.conversations);
   const activeConversationId = useChatStore((state) => state.activeConversationId);
   const messages = useChatStore((state) => state.messages);
@@ -134,7 +132,6 @@ function ChatWindow({ draft, onDraftChange, getToken }) {
     try {
       await sendMessage({
         message: draft,
-        getToken: getToken || hookGetToken,
       });
       onDraftChange("");
     } catch (error) {

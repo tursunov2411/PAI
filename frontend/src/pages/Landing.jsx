@@ -1,4 +1,3 @@
-import { SignInButton, SignUpButton, useAuth } from "@clerk/clerk-react";
 import { ArrowRight, DatabaseZap, ShieldCheck, Sparkles } from "lucide-react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -14,8 +13,8 @@ const featureCards = [
   },
   {
     icon: ShieldCheck,
-    title: "Secure Identity Layer",
-    description: "Clerk-powered auth with protected routes and a durable user profile in PostgreSQL.",
+    title: "Private Owner Workspace",
+    description: "Single-user owner mode with a durable profile in PostgreSQL and no public auth screen.",
   },
   {
     icon: Sparkles,
@@ -26,14 +25,9 @@ const featureCards = [
 
 function Landing() {
   const navigate = useNavigate();
-  const { isLoaded, isSignedIn } = useAuth();
   const fetchUser = useUserStore((state) => state.fetchUser);
 
   useEffect(() => {
-    if (!isLoaded || !isSignedIn) {
-      return;
-    }
-
     const redirectUser = async () => {
       try {
         await fetchUser();
@@ -46,7 +40,7 @@ function Landing() {
     };
 
     redirectUser();
-  }, [fetchUser, isLoaded, isSignedIn, navigate]);
+  }, [fetchUser, navigate]);
 
   return (
     <div className="relative overflow-hidden">
@@ -65,17 +59,18 @@ function Landing() {
           </p>
 
           <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <SignInButton mode="modal">
-              <Button size="lg" className="min-w-44">
-                Sign In
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </SignInButton>
-            <SignUpButton mode="modal">
-              <Button variant="secondary" size="lg" className="min-w-44">
-                Get Started
-              </Button>
-            </SignUpButton>
+            <Button size="lg" className="min-w-44" onClick={() => navigate("/dashboard")}>
+              Open Workspace
+              <ArrowRight className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="secondary"
+              size="lg"
+              className="min-w-44"
+              onClick={() => navigate("/onboarding")}
+            >
+              Setup Profile
+            </Button>
           </div>
         </div>
 
@@ -104,4 +99,3 @@ function Landing() {
 }
 
 export default Landing;
-

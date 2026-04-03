@@ -11,7 +11,9 @@ export const clearTokenGetter = () => {
 };
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "http://localhost:5000",
+  baseURL:
+    import.meta.env.VITE_API_URL ||
+    (import.meta.env.DEV ? "http://localhost:5000" : window.location.origin),
 });
 
 api.interceptors.request.use(async (config) => {
@@ -37,4 +39,3 @@ api.interceptors.response.use(
 );
 
 export default api;
-

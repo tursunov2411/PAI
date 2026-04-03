@@ -1,4 +1,3 @@
-import { useUser } from "@clerk/clerk-react";
 import { ChevronLeft, ChevronRight, Languages, Sparkles, UserRound } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -44,7 +43,6 @@ const languageOptions = [
 
 function Onboarding() {
   const navigate = useNavigate();
-  const { user } = useUser();
   const storedUser = useUserStore((state) => state.user);
   const fetchUser = useUserStore((state) => state.fetchUser);
   const [step, setStep] = useState(1);
@@ -88,16 +86,10 @@ function Onboarding() {
   };
 
   const handleComplete = async () => {
-    if (!user?.primaryEmailAddress?.emailAddress) {
-      toast.error("Your Clerk account email is required to finish onboarding.");
-      return;
-    }
-
     setIsSubmitting(true);
 
     try {
       await api.post("/api/auth/sync", {
-        email: user.primaryEmailAddress.emailAddress,
         ...form,
       });
 
@@ -316,4 +308,3 @@ function Onboarding() {
 }
 
 export default Onboarding;
-

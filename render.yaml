@@ -34,10 +34,14 @@ services:
         value: sunnatilla-memory
       - key: PINECONE_REGION
         value: us-east-1
-      - key: CLERK_SECRET_KEY
-        sync: false
       - key: FRONTEND_URL
         sync: false
+      - key: SINGLE_USER_EMAIL
+        value: owner@pai.local
+      - key: SINGLE_USER_NAME
+        value: Rayyan
+      - key: SINGLE_USER_ASSISTANT_NAME
+        value: Sunnatilla AI
 
   - type: static
     name: rayyanai-frontend
@@ -48,8 +52,6 @@ services:
         source: /*
         destination: /index.html
     envVars:
-      - key: VITE_CLERK_PUBLISHABLE_KEY
-        sync: false
       - key: VITE_API_URL
         sync: false
 

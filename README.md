@@ -8,7 +8,7 @@ Rayyan AI is a personal intelligence OS built as a Node/React monorepo.
 - Backend: Node.js + Express
 - Database: PostgreSQL + Prisma
 - Cache: Redis
-- Auth: Clerk
+- Auth: Single-user owner mode
 - Vector DB: Pinecone
 - AI: OpenAI, Anthropic, Google Gemini
 
@@ -38,12 +38,13 @@ Backend:
 - `PINECONE_API_KEY`
 - `PINECONE_INDEX`
 - `PINECONE_REGION`
-- `CLERK_SECRET_KEY`
 - `FRONTEND_URL`
+- `SINGLE_USER_EMAIL` (optional)
+- `SINGLE_USER_NAME` (optional)
+- `SINGLE_USER_ASSISTANT_NAME` (optional)
 
 Frontend:
 
-- `VITE_CLERK_PUBLISHABLE_KEY`
 - `VITE_API_URL`
 
 ### First Deploy Notes

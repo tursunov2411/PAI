@@ -1,6 +1,7 @@
 import express from "express";
 import { prisma } from "../lib/prisma.js";
 import { requireAuth } from "../middleware/auth.js";
+import { getUserByClerkIdOrThrow } from "../lib/currentUser.js";
 
 const router = express.Router();
 
@@ -8,18 +9,7 @@ router.use(requireAuth);
 
 router.get("/profile", async (req, res, next) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: req.userId,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User profile not found.",
-      });
-    }
+    const user = await getUserByClerkIdOrThrow(req.userId);
 
     return res.json({
       success: true,
@@ -32,22 +22,11 @@ router.get("/profile", async (req, res, next) => {
 
 router.put("/profile", async (req, res, next) => {
   try {
-    const user = await prisma.user.findUnique({
-      where: {
-        clerkId: req.userId,
-      },
-    });
-
-    if (!user) {
-      return res.status(404).json({
-        success: false,
-        message: "User profile not found.",
-      });
-    }
+    const user = await getUserByClerkIdOrThrow(req.userId);
 
     const updatedUser = await prisma.user.update({
       where: {
-        clerkId: req.userId,
+        id: user.id,
       },
       data: {
         ...(req.body.name !== undefined ? { name: req.body.name } : {}),
@@ -72,4 +51,3 @@ router.put("/profile", async (req, res, next) => {
 });
 
 export default router;
-

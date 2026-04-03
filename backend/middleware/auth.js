@@ -3,6 +3,8 @@ import { verifyToken } from "@clerk/clerk-sdk-node";
 
 dotenv.config();
 
+const SINGLE_USER_CLERK_ID = process.env.SINGLE_USER_CLERK_ID || "single-user";
+
 const extractBearerToken = (authorizationHeader = "") => {
   if (!authorizationHeader.startsWith("Bearer ")) {
     return null;
@@ -12,6 +14,14 @@ const extractBearerToken = (authorizationHeader = "") => {
 };
 
 export const requireAuth = async (req, res, next) => {
+  if (!process.env.CLERK_SECRET_KEY) {
+    req.userId = SINGLE_USER_CLERK_ID;
+    req.auth = {
+      mode: "single-user",
+    };
+    return next();
+  }
+
   const token = extractBearerToken(req.headers.authorization);
 
   if (!token) {
@@ -37,4 +47,3 @@ export const requireAuth = async (req, res, next) => {
     });
   }
 };
-
