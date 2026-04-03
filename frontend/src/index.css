@@ -1,0 +1,144 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  @apply min-h-screen bg-background bg-hero-glow text-text-primary antialiased;
+}
+
+#root {
+  @apply min-h-screen;
+}
+
+* {
+  @apply border-border;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f1017;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(124, 106, 247, 0.38);
+  border-radius: 9999px;
+}
+
+.glass-panel {
+  @apply rounded-2xl border border-white/5 bg-surface/85 shadow-[0_16px_80px_rgba(6,7,13,0.45)] backdrop-blur-xl;
+}
+
+.grid-noise {
+  background-image: linear-gradient(rgba(255, 255, 255, 0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+.text-gradient {
+  background: linear-gradient(120deg, #f0f0ff 0%, #b0a7ff 45%, #7c6af7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.page-shell {
+  @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+}
+
+.note-editor-content {
+  min-height: 360px;
+  color: #f0f0ff;
+  line-height: 1.8;
+}
+
+.note-editor-content > * + * {
+  margin-top: 0.9rem;
+}
+
+.note-editor-content h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+}
+
+.note-editor-content h2 {
+  font-size: 1.45rem;
+  font-weight: 600;
+}
+
+.note-editor-content h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+}
+
+.note-editor-content p,
+.note-editor-content li,
+.note-editor-content blockquote {
+  font-size: 0.95rem;
+}
+
+.note-editor-content ul,
+.note-editor-content ol {
+  padding-left: 1.35rem;
+}
+
+.note-editor-content ul {
+  list-style: disc;
+}
+
+.note-editor-content ol {
+  list-style: decimal;
+}
+
+.note-editor-content blockquote {
+  border-left: 3px solid rgba(124, 106, 247, 0.55);
+  padding-left: 1rem;
+  color: #c9c7e5;
+}
+
+.note-editor-content pre {
+  overflow-x: auto;
+  border-radius: 1rem;
+  background: rgba(0, 0, 0, 0.35);
+  padding: 1rem;
+  color: #b7bbff;
+}
+
+.note-editor-content a {
+  color: #a599ff;
+}
+
+.note-editor-content mark {
+  border-radius: 0.35rem;
+  background: rgba(251, 191, 36, 0.25);
+  color: inherit;
+  padding: 0.05rem 0.18rem;
+}
+
+.note-editor-content ul[data-type="taskList"] {
+  list-style: none;
+  padding-left: 0;
+}
+
+.note-editor-content ul[data-type="taskList"] li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.6rem;
+}
+
+.note-editor-content ul[data-type="taskList"] li > label {
+  margin-top: 0.15rem;
+}

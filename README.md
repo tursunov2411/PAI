@@ -1,0 +1,66 @@
+# Rayyan AI
+
+Rayyan AI is a personal intelligence OS built as a Node/React monorepo.
+
+## Stack
+
+- Frontend: React 18 + Vite + TailwindCSS
+- Backend: Node.js + Express
+- Database: PostgreSQL + Prisma
+- Cache: Redis
+- Auth: Clerk
+- Vector DB: Pinecone
+- AI: OpenAI, Anthropic, Google Gemini
+
+## Repo Layout
+
+```text
+frontend/  # Vite app
+backend/   # Express API + Prisma
+```
+
+## Render Deployment
+
+This repo includes [render.yaml](./render.yaml) for:
+
+- `rayyanai-api` web service
+- `rayyanai-frontend` static site
+- `rayyanai-db` PostgreSQL database
+- `rayyanai-redis` Key Value instance
+
+### Required Render Environment Variables
+
+Backend:
+
+- `OPENAI_API_KEY`
+- `ANTHROPIC_API_KEY`
+- `GOOGLE_GEMINI_API_KEY`
+- `PINECONE_API_KEY`
+- `PINECONE_INDEX`
+- `PINECONE_REGION`
+- `CLERK_SECRET_KEY`
+- `FRONTEND_URL`
+
+Frontend:
+
+- `VITE_CLERK_PUBLISHABLE_KEY`
+- `VITE_API_URL`
+
+### First Deploy Notes
+
+1. Create the Render blueprint from this repo.
+2. Fill the `sync: false` variables in Render.
+3. Set `FRONTEND_URL` to your frontend Render URL.
+4. Set `VITE_API_URL` to your backend Render URL.
+5. Run the backend after the database is created so Prisma migrations can apply with:
+
+```bash
+npm run prisma:deploy --workspace backend
+```
+
+## Local Secret Safety
+
+- Real `.env` files are ignored by git.
+- Example values live in:
+  - [backend/.env.example](./backend/.env.example)
+  - [frontend/.env.example](./frontend/.env.example)

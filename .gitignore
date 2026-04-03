@@ -1,0 +1,29 @@
+node_modules/
+dist/
+coverage/
+.DS_Store
+*.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+!.env*.example
+
+# Editors and OS
+.vscode/
+.idea/
+Thumbs.db
+
+# Prisma / local DB
+backend/prisma/dev.db
+backend/prisma/dev.db-journal
+
+# Build output
+frontend/dist/
+backend/dist/
+
+# Caches
+.cache/
+.parcel-cache/
+.turbo/

@@ -1,0 +1,132 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String   @id @default(cuid())
+  clerkId        String   @unique
+  email          String   @unique
+  name           String
+  aboutMe        String?
+  tonePreference String   @default("balanced")
+  assistantName  String   @default("Sunnatilla AI")
+  language       String   @default("en")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  memories       Memory[]
+  goals          Goal[]
+  conversations  Conversation[]
+  notes          Note[]
+  studyBlocks    StudyBlock[]
+}
+
+model Memory {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id])
+  source     String
+  category   String
+  text       String   @db.Text
+  pineconeId String?
+  date       DateTime
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+}
+
+model Conversation {
+  id        String    @id @default(cuid())
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title     String?
+  model     String    @default("claude-sonnet")
+  messages  Message[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([userId, updatedAt])
+}
+
+model Message {
+  id             String       @id @default(cuid())
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  role           String
+  content        String       @db.Text
+  model          String?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId])
+  @@index([conversationId, createdAt])
+}
+
+model Goal {
+  id          String    @id @default(cuid())
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title       String
+  category    String
+  description String?   @db.Text
+  deadline    DateTime?
+  priority    String    @default("medium")
+  status      String    @default("not_started")
+  progress    Int       @default(0)
+  studyPlan   Json?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  notes       Note[]
+  studyBlocks StudyBlock[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@index([userId, category])
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalId    String?
+  goal      Goal?    @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  memoryId  String?  @unique
+  title     String
+  content   String   @db.Text
+  plainText String   @db.Text
+  tags      String[]
+  source    String   @default("manual")
+  isPinned  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([userId, isPinned])
+  @@index([userId, goalId])
+}
+
+model StudyBlock {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goalId    String?
+  goal      Goal?    @relation(fields: [goalId], references: [id], onDelete: SetNull)
+  title     String
+  subject   String
+  date      DateTime
+  startTime String
+  endTime   String
+  duration  Int
+  notes     String?
+  status    String   @default("scheduled")
+  color     String   @default("#7c6af7")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, date])
+  @@index([userId, goalId])
+}
